@@ -9,21 +9,38 @@ https://github.com/resemble-ai/resemble-enhance/assets/660224/bc3ec943-e795-4646
 
 Resemble Enhance is an AI-powered tool that aims to improve the overall quality of speech by performing denoising and enhancement. It consists of two modules: a denoiser, which separates speech from a noisy audio, and an enhancer, which further boosts the perceptual audio quality by restoring audio distortions and extending the audio bandwidth. The two models are trained on high-quality 44.1kHz speech data that guarantees the enhancement of your speech with high quality.
 
+This Github fork of the Resemble Enhance allows the source code to be built as a `wheel` to further include in the Oye 
+Hearing `aislar-voz` code and deployment. The reason to build the wheel is to overcome incompatible dependencies 
+from the `resemble-enhance` module from PyPi, which requires much older versions of some of the important third 
+party modules such as `torch` and `torchaudio`.
+
+Another change is to use Python 3.12 as the base version instead of 3.10.
+
+## Build
+
+To build the wheel file:
+
+```bash
+> python3.12 -m venv <venvName>
+> . .<venvName>/bin/activate
+> python -m build --wheel
+```
+
+After the `wheel` is successfully built, copy the wheel file to the desired Python application location to use in 
+that application.
+
+The wheel file will be in the `dist` directory, and the name will be of the format 
+`resemble_enhance-<version>-py3-none-any.whl`.
+
+The value of `<version>` will be that from the `pyproject.toml` file. To update the version, update it in that file, 
+rebuild the wheel, commit the changes, and then push and merge the branch into the `main` branch.
+
 ## Usage
 
-### Installation
-
-Install the stable version:
-
-```bash
-pip install resemble-enhance --upgrade
-```
-
-Or try the latest pre-release version:
-
-```bash
-pip install resemble-enhance --upgrade --pre
-```
+> [!NOTE]
+> The `Enhance` and `Denoise` CLI scripts, and the `Web Demo` have not been tested with this forked branch version of 
+> `resemble-enhance`. These will likely still work, but cannot be guaranteed. The built wheel has been tested for 
+> denoising with `aislar-voz` aka the Oye isolation server.
 
 ### Enhance
 
@@ -46,6 +63,9 @@ python app.py
 ```
 
 ## Train your own model
+
+> [!NOTE]
+> Model training has not been tested with this forked branch version of `resemble-enhance`.
 
 ### Data Preparation
 
