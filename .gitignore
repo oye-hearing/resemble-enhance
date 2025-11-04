@@ -3,7 +3,7 @@ bin/*
 lib/*
 build/*
 dist/*
-resemble_enhance.egg-info/*
+*.egg-info/*
 .resemble-enhance/*
 .tests/*
 .idea/*
