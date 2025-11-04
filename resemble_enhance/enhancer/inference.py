@@ -4,9 +4,10 @@ from pathlib import Path
 
 import torch
 
-from ..inference import inference
 from .download import download
-from .train import Enhancer, HParams
+from .enhancer import Enhancer
+from .hparams import HParams
+from ..inference import inference
 
 logger = logging.getLogger(__name__)
 

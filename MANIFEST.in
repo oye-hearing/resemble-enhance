@@ -1,0 +1,9 @@
+# 1. Include all Python script files (*.py) in all sub-directories of the
+#    'resemble_enhance' package directory recursively.
+include requirements.inference.txt
+recursive-include resemble_enhance *.py
+
+# 2. Exclude any file whose name contains 'train' and ends with '.py', in all the sub-directories of the
+#    'resemble_enhance' package directory recursively.
+recursive-exclude resemble_enhance *train*.py
+exclude app.py

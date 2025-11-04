@@ -6,14 +6,12 @@ import torch
 from torch import Tensor, nn
 from torch.distributions import Beta
 
-from ..common import Normalizer
-from ..denoiser.inference import load_denoiser
-from ..melspec import MelSpectrogram
-from ..utils.distributed import global_leader_only
-from ..utils.train_loop import TrainLoop
 from .hparams import HParams
 from .lcfm import CFM, IRMAE, LCFM
 from .univnet import UnivNet
+from ..common import Normalizer
+from ..denoiser.inference import load_denoiser
+from ..melspec import MelSpectrogram
 
 logger = logging.getLogger(__name__)
 
@@ -106,7 +104,6 @@ class Enhancer(nn.Module):
             return self.mel_fn(x)[..., :-1]  # (b d t)
         return self.mel_fn(x)
 
-    @global_leader_only
     @torch.no_grad()
     def _visualize(self, original_mel, denoised_mel):
         loop = TrainLoop.get_running_loop()

@@ -3,9 +3,9 @@ requires = ["setuptools==80.9.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "resemble-enhance"
-version = "0.0.2+oye.1"
-description = "Speech denoising and enhancement with deep learning"
+name = "resemble-enhance-inference"
+version = "1.0.1+oye"
+description = "Speech denoising and enhancement - Inference only"
 readme = "README.md"
 authors = [
     {name = "Resemble AI", email = "team@resemble.ai"},
@@ -15,33 +15,17 @@ keywords = ["speech", "denoising", "enhancement"]
 requires-python = ">=3.12"
 
 # Use setuptools file-based installation of requirements
-# Modules from requirements.txt for dependencies when building the wheel
-dependencies = [
-    "celluloid>=0.2.0",
-    "deepspeed==0.18.1",
-    "librosa>=0.10.1",
-    "matplotlib>=3.8.1",
-    "numpy>=1.26.2",
-    "omegaconf>=2.3.0",
-    "pandas>=2.1.3",
-    "ptflops>=0.7.1.2",
-    "rich>=13.7.0",
-    "scipy>=1.11.4",
-    "soundfile>=0.12.1",
-    "torch==2.8.0",
-    "torchaudio==2.8.0",
-    "torchvision==0.23.0",
-    "tqdm==4.67.1",
-    "resampy==0.4.3",
-    "tabulate==0.9.0",
-    "gradio>=4.8.0"
-]
+# Modules from requirements.txt (or such a file) for dependencies when building the wheel
+dynamic = ["dependencies"]
 
 [project.scripts]
 resemble-enhance = "resemble_enhance.enhancer.__main__:main"
 
-[tool.setuptools.packages.find]
-include = ["resemble_enhance*"]
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages]
+find = {}
 
 [tool.black]
 line-length = 120

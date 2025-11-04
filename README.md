@@ -10,9 +10,16 @@ https://github.com/resemble-ai/resemble-enhance/assets/660224/bc3ec943-e795-4646
 Resemble Enhance is an AI-powered tool that aims to improve the overall quality of speech by performing denoising and enhancement. It consists of two modules: a denoiser, which separates speech from a noisy audio, and an enhancer, which further boosts the perceptual audio quality by restoring audio distortions and extending the audio bandwidth. The two models are trained on high-quality 44.1kHz speech data that guarantees the enhancement of your speech with high quality.
 
 This Github fork of the Resemble Enhance allows the source code to be built as a `wheel` to further include in the Oye 
-Hearing `aislar-voz` code and deployment. The reason to build the wheel is to overcome incompatible dependencies 
-from the `resemble-enhance` module from PyPi, which requires much older versions of some of the important third 
-party modules such as `torch` and `torchaudio`.
+Hearing `aislar-voz` code and deployment. The reasons to build the wheel are -
+1. To overcome incompatible dependencies from the `resemble-enhance` module from PyPi, which requires much older versions of some of the important third party modules such as `torch` and `torchaudio`.
+2. To build separate modules for inference and training in order to exclude unnecessary dependencies during 
+   inference, that are required only for training. The main dependency in question here is the `deepspeed`Python 
+   module, which requires additional CUDA libraries to be built into the OS for NVIDIA GPU based deployments. This 
+   library is required by `resemble-enhance` for training only.
+
+
+> [!NOTE]
+> A separate module or wheel named `resemble_enhance_inference` is built for use in the `aislar-voz` and other Oye applications
 
 Another change is to use Python 3.12 as the base version instead of 3.10.
 
@@ -23,14 +30,14 @@ To build the wheel file:
 ```bash
 > python3.12 -m venv <venvName>
 > . .<venvName>/bin/activate
-> python -m build --wheel
+> python -m build
 ```
 
 After the `wheel` is successfully built, copy the wheel file to the desired Python application location to use in 
 that application.
 
 The wheel file will be in the `dist` directory, and the name will be of the format 
-`resemble_enhance-<version>-py3-none-any.whl`.
+`resemble_enhance_inference-<version>-py3-none-any.whl`.
 
 The value of `<version>` will be that from the `pyproject.toml` file. To update the version, update it in that file, 
 rebuild the wheel, commit the changes, and then push and merge the branch into the `main` branch.
@@ -52,62 +59,6 @@ resemble-enhance in_dir out_dir
 
 ```
 resemble-enhance in_dir out_dir --denoise_only
-```
-
-### Web Demo
-
-We provide a web demo built with Gradio, you can try it out [here](https://huggingface.co/spaces/ResembleAI/resemble-enhance), or also run it locally:
-
-```
-python app.py
-```
-
-## Train your own model
-
-> [!NOTE]
-> Model training has not been tested with this forked branch version of `resemble-enhance`.
-
-### Data Preparation
-
-You need to prepare a foreground speech dataset and a background non-speech dataset. In addition, you need to prepare a RIR dataset ([examples](https://github.com/RoyJames/room-impulse-responses)).
-
-```bash
-data
-├── fg
-│   ├── 00001.wav
-│   └── ...
-├── bg
-│   ├── 00001.wav
-│   └── ...
-└── rir
-    ├── 00001.npy
-    └── ...
-```
-
-### Training
-
-#### Denoiser Warmup
-
-Though the denoiser is trained jointly with the enhancer, it is recommended for a warmup training first.
-
-```bash
-python -m resemble_enhance.denoiser.train --yaml config/denoiser.yaml runs/denoiser
-```
-
-#### Enhancer
-
-Then, you can train the enhancer in two stages. The first stage is to train the autoencoder and vocoder. And the second stage is to train the latent conditional flow matching (CFM) model.
-
-##### Stage 1
-
-```bash
-python -m resemble_enhance.enhancer.train --yaml config/enhancer_stage1.yaml runs/enhancer_stage1
-```
-
-##### Stage 2
-
-```bash
-python -m resemble_enhance.enhancer.train --yaml config/enhancer_stage2.yaml runs/enhancer_stage2
 ```
 
 ## Blog
