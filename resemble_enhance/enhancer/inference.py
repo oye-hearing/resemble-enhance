@@ -30,6 +30,10 @@ def denoise(dwav, sr, device, run_dir=None):
     enhancer = load_enhancer(run_dir, device)
     return inference(model=enhancer.denoiser, dwav=dwav, sr=sr, device=device)
 
+@torch.inference_mode()
+def denoise_audio(model, dwav, sr, device):
+    return inference(model=model, dwav=dwav, sr=sr, device=device)
+
 
 @torch.inference_mode()
 def enhance(dwav, sr, device, nfe=32, solver="midpoint", lambd=0.5, tau=0.5, run_dir=None):
