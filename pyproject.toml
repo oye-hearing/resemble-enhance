@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "resemble-enhance-inference"
-version = "1.0.1+oye"
+version = "1.0.2+oye"
 description = "Speech denoising and enhancement - Inference only"
 readme = "README.md"
 authors = [
